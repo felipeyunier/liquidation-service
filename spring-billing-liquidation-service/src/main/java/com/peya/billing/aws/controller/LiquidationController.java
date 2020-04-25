@@ -14,11 +14,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.peya.billing.aws.service.interfaces.IExecLiquidationService;
 import com.peya.billing.aws.service.interfaces.IFindDataService;
+import com.peya.billing.aws.service.interfaces.IGeneratorFileService;
 import com.peya.billing.aws.snapshot.LiquidationTaskSnapshopt;
 
 @Controller
 @RequestMapping("/liquidation")
 public class LiquidationController {
+	
+	@Autowired
+	private IGeneratorFileService emptyGeneratorFileService;
 
 	@Autowired
 	private IFindDataService randonFindDataService;
@@ -37,7 +41,12 @@ public class LiquidationController {
 	}
 	
 	@PostMapping("/task/{idTask}")
-	public ResponseEntity<Boolean> findLiquidationByGenerate( @PathVariable Long idTask){
+	public ResponseEntity<Boolean> buildLiquidationByIdTask( @PathVariable Long idTask){
 		return ResponseEntity.ok(emptyExecLiquidationService.exec(idTask));
+	}
+	
+	@PostMapping("/{idLiquidation}/buildFiles")
+	public ResponseEntity<Boolean> generateFileByIdLiquidatio( @PathVariable Long idLiquidation){
+		return ResponseEntity.ok(emptyGeneratorFileService.generateFile(idLiquidation));
 	}
 }
